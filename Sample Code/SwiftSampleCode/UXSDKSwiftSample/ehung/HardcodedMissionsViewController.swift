@@ -47,4 +47,10 @@ class HardcodedMissionsViewController: DUXDefaultLayoutViewController {
         super.viewDidLoad()
         
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        self.leadingViewController?.view.isHidden = true
+        self.trailingViewController?.view.isHidden = true
+    }
 }
