@@ -97,32 +97,44 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="M8V-fF-tLX">
                                 <rect key="frame" x="452" y="95" width="200" height="158.5"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aGF-7l-b9T">
-                                        <rect key="frame" x="0.0" y="0.0" width="200" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="M1 (Bad)"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gai-tb-614">
-                                        <rect key="frame" x="0.0" y="34.5" width="200" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="M2 (Good)"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="npM-UL-Tuz">
-                                        <rect key="frame" x="0.0" y="69" width="200" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Upload"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDF-vv-lSY">
-                                        <rect key="frame" x="0.0" y="103.5" width="200" height="34.5"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Start"/>
-                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="N/A" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yud-u4-IRN">
-                                        <rect key="frame" x="0.0" y="138" width="200" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aGF-7l-b9T">
+                                        <rect key="frame" x="0.0" y="20.5" width="200" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="M1 (Bad)"/>
+                                        <connections>
+                                            <action selector="loadMission1:" destination="oxe-pl-Lvc" eventType="touchUpInside" id="t69-S2-2tr"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gai-tb-614">
+                                        <rect key="frame" x="0.0" y="55" width="200" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="M2 (Good)"/>
+                                        <connections>
+                                            <action selector="loadMission2:" destination="oxe-pl-Lvc" eventType="touchUpInside" id="1vn-1I-bRS"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="npM-UL-Tuz">
+                                        <rect key="frame" x="0.0" y="89.5" width="200" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Upload"/>
+                                        <connections>
+                                            <action selector="uploadMission:" destination="oxe-pl-Lvc" eventType="touchUpInside" id="mGh-H5-Xex"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDF-vv-lSY">
+                                        <rect key="frame" x="0.0" y="124" width="200" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Start"/>
+                                        <connections>
+                                            <action selector="startMission:" destination="oxe-pl-Lvc" eventType="touchUpInside" id="9OZ-Ve-6xC"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.074509803920000006" green="0.078431372550000003" blue="0.078431372550000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -144,6 +156,13 @@
                             <constraint firstItem="gkn-Gf-7Ub" firstAttribute="top" secondItem="7Sr-Ty-PuV" secondAttribute="bottom" constant="50" id="xrr-Gb-ku4"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="m1Button" destination="aGF-7l-b9T" id="Yoq-Xz-zGA"/>
+                        <outlet property="m2Button" destination="Gai-tb-614" id="SIb-lE-8BJ"/>
+                        <outlet property="startButton" destination="YDF-vv-lSY" id="PQd-Ae-1e8"/>
+                        <outlet property="statusLabel" destination="yud-u4-IRN" id="XmX-on-QII"/>
+                        <outlet property="uploadButton" destination="npM-UL-Tuz" id="SQ3-Nu-izp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="14u-M6-kcs" sceneMemberID="firstResponder"/>
             </objects>

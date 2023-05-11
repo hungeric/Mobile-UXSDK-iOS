@@ -527,7 +527,7 @@
 					"$(PROJECT_DIR)/../DJIWidget/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/UXSDKSwiftSample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -554,7 +554,7 @@
 					"$(PROJECT_DIR)/../DJIWidget/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/UXSDKSwiftSample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
