@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		40AD40212A0D34CB009D1659 /* HardcodedMissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AD401F2A0D34CB009D1659 /* HardcodedMissionsViewController.swift */; };
+		40AD40222A0D34CB009D1659 /* HardcodedMissions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40AD40202A0D34CB009D1659 /* HardcodedMissions.storyboard */; };
 		53C8811021507142003F4561 /* CustomMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C8810D21507141003F4561 /* CustomMapViewController.swift */; };
 		53C8811121507142003F4561 /* MapWidget.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53C8810F21507142003F4561 /* MapWidget.storyboard */; };
 		53ECE275233DB80100E278CD /* SimulationControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ECE274233DB80100E278CD /* SimulationControlsViewController.swift */; };
@@ -45,6 +47,8 @@
 
 /* Begin PBXFileReference section */
 		38D2C47F1E0B1F20009A3831 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		40AD401F2A0D34CB009D1659 /* HardcodedMissionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardcodedMissionsViewController.swift; sourceTree = "<group>"; };
+		40AD40202A0D34CB009D1659 /* HardcodedMissions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HardcodedMissions.storyboard; sourceTree = "<group>"; };
 		5300B461212BDE970015AF46 /* FFmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FFmpeg.framework; path = ../DJIWidget/FFmpeg/FFmpeg.framework; sourceTree = "<group>"; };
 		53C8810D21507141003F4561 /* CustomMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMapViewController.swift; sourceTree = "<group>"; };
 		53C8810F21507142003F4561 /* MapWidget.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MapWidget.storyboard; sourceTree = "<group>"; };
@@ -93,6 +97,15 @@
 				8483C4A7F70776CA67C65CA8 /* Pods_UXSDKSwiftSample.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		40AD401E2A0D341A009D1659 /* ehung */ = {
+			isa = PBXGroup;
+			children = (
+				40AD40202A0D34CB009D1659 /* HardcodedMissions.storyboard */,
+				40AD401F2A0D34CB009D1659 /* HardcodedMissionsViewController.swift */,
+			);
+			path = ehung;
 			sourceTree = "<group>";
 		};
 		4D9BDACF6F6942DDFF44C784 /* Pods */ = {
@@ -198,6 +211,7 @@
 		A452DC242070D8CB00EFBA30 /* UXSDKSwiftSample */ = {
 			isa = PBXGroup;
 			children = (
+				40AD401E2A0D341A009D1659 /* ehung */,
 				A452DC252070D8CB00EFBA30 /* AppDelegate.swift */,
 				A452DC262070D8CB00EFBA30 /* Assets.xcassets */,
 				A452DC272070D8CB00EFBA30 /* LaunchScreen.storyboard */,
@@ -287,6 +301,7 @@
 				A452DC442070D8CC00EFBA30 /* PanelsCollections.storyboard in Resources */,
 				A452DC472070D8CC00EFBA30 /* Widgets.storyboard in Resources */,
 				53C8811121507142003F4561 /* MapWidget.storyboard in Resources */,
+				40AD40222A0D34CB009D1659 /* HardcodedMissions.storyboard in Resources */,
 				A452DC392070D8CC00EFBA30 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,6 +393,7 @@
 				53ECE275233DB80100E278CD /* SimulationControlsViewController.swift in Sources */,
 				53ECE278233DB8B500E278CD /* Helpers.swift in Sources */,
 				A452DC382070D8CC00EFBA30 /* AppDelegate.swift in Sources */,
+				40AD40212A0D34CB009D1659 /* HardcodedMissionsViewController.swift in Sources */,
 				A452DC3F2070D8CC00EFBA30 /* DefaultLayoutViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

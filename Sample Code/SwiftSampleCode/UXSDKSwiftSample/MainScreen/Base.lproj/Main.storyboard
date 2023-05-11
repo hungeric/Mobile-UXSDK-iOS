@@ -7,10 +7,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--DefaultLayout-->
+        <!--HardcodedMissions-->
         <scene sceneID="zIg-MP-mbB">
             <objects>
-                <viewControllerPlaceholder storyboardName="DefaultLayout" id="1a7-1n-JVJ" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="HardcodedMissions" id="1a7-1n-JVJ" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="9NJ-pm-HYi"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o5d-4G-1ij" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
