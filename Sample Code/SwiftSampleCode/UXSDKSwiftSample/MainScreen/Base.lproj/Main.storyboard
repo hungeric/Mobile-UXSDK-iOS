@@ -7,6 +7,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--DefaultLayout-->
+        <scene sceneID="zIg-MP-mbB">
+            <objects>
+                <viewControllerPlaceholder storyboardName="DefaultLayout" id="1a7-1n-JVJ" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="9NJ-pm-HYi"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o5d-4G-1ij" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1046" y="987"/>
+        </scene>
         <!--Main View Controller-->
         <scene sceneID="Zr5-W9-qMH">
             <objects>
@@ -236,6 +246,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.074509803921568626" green="0.078431372549019607" blue="0.078431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <segue destination="1a7-1n-JVJ" kind="show" id="QIl-E4-FUu"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="139" id="vKw-ul-cpN">
                                         <rect key="frame" x="0.0" y="454" width="1024" height="139"/>
