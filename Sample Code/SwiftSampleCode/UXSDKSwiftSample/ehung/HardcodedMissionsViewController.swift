@@ -89,7 +89,7 @@ class HardcodedMissionsViewController: DUXDefaultLayoutViewController {
     }
 }
 
-final class HardcodedMissionsManager {
+final class HardcodedMissionsManager: NSObject {
     static let shared = HardcodedMissionsManager()
     
     var currentStatus: CurrentValueSubject<String, Never> = .init("N/A")
@@ -97,14 +97,23 @@ final class HardcodedMissionsManager {
     private var waypointMission = DJIMutableWaypointMission()
     private var cancellable: AnyCancellable?
     
+    private var photoIndex = 0
+
+    override init() {
+        super.init()
+        camera?.delegate = self
+    }
+
     func loadMission1() {
         waypointMission.removeAllWaypoints()
+        photoIndex = 0
         loadM1Sample()
         currentStatus.value = "Loaded M1"
     }
 
     func loadMission2() {
         waypointMission.removeAllWaypoints()
+        photoIndex = 0
         loadM2Sample()
         currentStatus.value = "Loaded M2"
     }
@@ -148,6 +157,13 @@ final class HardcodedMissionsManager {
 }
 
 private extension HardcodedMissionsManager {
+    var camera: DJICamera? {
+        guard let aircraft = DJISDKManager.product() as? DJIAircraft, let camera = aircraft.cameras?.first else {
+            return nil
+        }
+
+        return camera
+    }
     var missionOperator: DJIWaypointMissionOperator? {
         guard let missionOperator = DJISDKManager.missionControl()?.waypointMissionOperator() else {
             currentStatus.value = "Mission Operator is nil"
@@ -162,7 +178,7 @@ private extension HardcodedMissionsManager {
         waypoint.speed = 8.0
         waypoint.heading = -131
         waypoint.gimbalPitch = 0.0
-        waypoint.shootPhotoTimeInterval = 0.0
+        waypoint.shootPhotoDistanceInterval = 0.0
         waypoint.actionTimeoutInSeconds = 60
         waypointMission.add(waypoint)
 
@@ -171,7 +187,7 @@ private extension HardcodedMissionsManager {
         waypoint.speed = 8.0
         waypoint.heading = -131
         waypoint.gimbalPitch = 0.0
-        waypoint.shootPhotoTimeInterval = 0.0
+        waypoint.shootPhotoDistanceInterval = 0.0
         waypoint.actionTimeoutInSeconds = 60
         waypointMission.add(waypoint)
         
@@ -180,7 +196,7 @@ private extension HardcodedMissionsManager {
         waypoint.speed = 8.0
         waypoint.heading = 90
         waypoint.gimbalPitch = -90.0
-        waypoint.shootPhotoTimeInterval = 0.0
+        waypoint.shootPhotoDistanceInterval = 0.0
         waypoint.actionTimeoutInSeconds = 60
         waypointMission.add(waypoint)
 
@@ -189,7 +205,7 @@ private extension HardcodedMissionsManager {
         waypoint.speed = 6.437376
         waypoint.heading = 90
         waypoint.gimbalPitch = -90.0
-        waypoint.shootPhotoTimeInterval = 16.093441
+        waypoint.shootPhotoDistanceInterval = 16.093441
         waypoint.actionTimeoutInSeconds = 999
         waypointMission.add(waypoint)
         
@@ -198,7 +214,7 @@ private extension HardcodedMissionsManager {
         waypoint.speed = 6.437376
         waypoint.heading = 90
         waypoint.gimbalPitch = -90.0
-        waypoint.shootPhotoTimeInterval = 0.0
+        waypoint.shootPhotoDistanceInterval = 0.0
         waypoint.actionTimeoutInSeconds = 999
         waypointMission.add(waypoint)
        
@@ -207,7 +223,7 @@ private extension HardcodedMissionsManager {
         waypoint.speed = 6.437376
         waypoint.heading = -90
         waypoint.gimbalPitch = -90.0
-        waypoint.shootPhotoTimeInterval = 16.093441
+        waypoint.shootPhotoDistanceInterval = 16.093441
         waypoint.actionTimeoutInSeconds = 999
         waypointMission.add(waypoint)
 
@@ -216,12 +232,110 @@ private extension HardcodedMissionsManager {
         waypoint.speed = 6.437376
         waypoint.heading = -90
         waypoint.gimbalPitch = -90.0
-        waypoint.shootPhotoTimeInterval = 16.093441
+        waypoint.shootPhotoDistanceInterval = 16.093441
         waypoint.actionTimeoutInSeconds = 999
         waypointMission.add(waypoint)
     }
 
     func loadM2Sample() {
-        loadM1Sample()
+        let m2JSON = """
+        {"waypoints":[{"actionTimeoutInSeconds":60,"speed":8,"gimbalPitch":0,"shootPhotoDistanceInterval":0,"lat":37.785834000000001,"heading":-135,"altitude":91.44000244140625,"long":-122.406417},{"actionTimeoutInSeconds":60,"speed":8,"gimbalPitch":0,"shootPhotoDistanceInterval":0,"lat":37.784909624181608,"heading":-135,"altitude":91.44000244140625,"long":-122.40757533714877},{"actionTimeoutInSeconds":60,"speed":8,"gimbalPitch":-90,"shootPhotoDistanceInterval":0,"lat":37.784909624181608,"heading":90,"altitude":60.959999084472656,"long":-122.40757533714877},{"actionTimeoutInSeconds":999,"speed":7.3152003288269043,"gimbalPitch":-90,"shootPhotoDistanceInterval":18.288000106811523,"lat":37.784909624181608,"heading":90,"altitude":60.358997344970703,"long":-122.40757533714877},{"actionTimeoutInSeconds":999,"speed":7.3152003288269043,"gimbalPitch":-90,"shootPhotoDistanceInterval":0,"lat":37.784909624181608,"heading":90,"altitude":60.959999084472656,"long":-122.40666793382216},{"actionTimeoutInSeconds":999,"speed":7.3152003288269043,"gimbalPitch":-90,"shootPhotoDistanceInterval":18.288000106811523,"lat":37.785197976632126,"heading":-90,"altitude":60.959999084472656,"long":-122.40666793382216},{"actionTimeoutInSeconds":999,"speed":7.3152003288269043,"gimbalPitch":-90,"shootPhotoDistanceInterval":0,"lat":37.785197976632126,"heading":-90,"altitude":60.959999084472656,"long":-122.40757533714877},{"actionTimeoutInSeconds":999,"speed":7.3152003288269043,"gimbalPitch":-90,"shootPhotoDistanceInterval":18.288000106811523,"lat":37.785486327957571,"heading":90,"altitude":60.959999084472656,"long":-122.40757533714877},{"actionTimeoutInSeconds":999,"speed":7.3152003288269043,"gimbalPitch":-90,"shootPhotoDistanceInterval":18.288000106811523,"lat":37.785486327957571,"heading":90,"altitude":60.959999084472656,"long":-122.40666793382216}]}
+        """
+        let jsonDecoder = JSONDecoder()
+        guard let result = try? jsonDecoder.decode(CodableDJIWaypointMission.self, from: m2JSON.data(using: .utf8)!) else { self.currentStatus.value = "M2 load failed"
+            return
+        }
+        waypointMission.addWaypoints(result.mission.allWaypoints())
+    }
+}
+
+extension HardcodedMissionsManager: DJICameraDelegate {
+    func camera(_ camera: DJICamera, didGenerateNewMediaFile newMedia: DJIMediaFile) {
+        photoIndex += 1
+        currentStatus.value = "photo taken index: \(photoIndex)"
+        print("ehung")
+        print(newMedia.description)
+    }
+}
+
+final class CodableDJIWaypointMission: Codable {
+    let mission: DJIWaypointMission
+
+    init(mission: DJIWaypointMission) {
+        self.mission = mission
+    }
+
+    var codableDJIWaypoints: [CodableDJIWaypoint] {
+        return mission.allWaypoints().map { point in
+            CodableDJIWaypoint(waypoint: point)
+        }
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case waypoints
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(codableDJIWaypoints, forKey: .waypoints)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let waypoints = try container.decode([CodableDJIWaypoint].self, forKey: .waypoints)
+        let mission = DJIMutableWaypointMission()
+        mission.addWaypoints(waypoints.map { $0.waypoint } )
+        self.mission = mission
+    }
+}
+
+final class CodableDJIWaypoint: Codable {
+    let waypoint: DJIWaypoint
+
+    init(waypoint: DJIWaypoint) {
+        self.waypoint = waypoint
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case lat
+        case long
+        case coordinate
+        case altitude
+        case speed
+        case heading
+        case gimbalPitch
+        case shootPhotoDistanceInterval
+        case actionTimeoutInSeconds
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(waypoint.coordinate.latitude, forKey: .lat)
+        try container.encode(waypoint.coordinate.longitude, forKey: .long)
+        try container.encode(waypoint.altitude, forKey: .altitude)
+        try container.encode(waypoint.speed, forKey: .speed)
+        try container.encode(waypoint.heading, forKey: .heading)
+        try container.encode(waypoint.gimbalPitch, forKey: .gimbalPitch)
+        try container.encode(waypoint.shootPhotoDistanceInterval, forKey: .shootPhotoDistanceInterval)
+        try container.encode(waypoint.actionTimeoutInSeconds, forKey: .actionTimeoutInSeconds)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let lat = try container.decode(Double.self, forKey: .lat)
+        let long = try container.decode(Double.self, forKey: .long)
+        let altitude = try container.decode(Float.self, forKey: .altitude)
+        let speed = try container.decode(Float.self, forKey: .speed)
+        let heading = try container.decode(Int.self, forKey: .heading)
+        let gimbalPitch = try container.decode(Float.self, forKey: .gimbalPitch)
+        let shootPhotoDistanceInterval = try container.decode(Float.self, forKey: .shootPhotoDistanceInterval)
+        let actionTimeoutInSeconds = try container.decode(Int.self, forKey: .actionTimeoutInSeconds)
+        waypoint = DJIWaypoint(coordinate: CLLocationCoordinate2DMake(lat, long))
+        waypoint.altitude = altitude
+        waypoint.speed = speed
+        waypoint.heading = heading
+        waypoint.gimbalPitch = gimbalPitch
+        waypoint.shootPhotoDistanceInterval = shootPhotoDistanceInterval
+        waypoint.actionTimeoutInSeconds = Int32(actionTimeoutInSeconds)
     }
 }
