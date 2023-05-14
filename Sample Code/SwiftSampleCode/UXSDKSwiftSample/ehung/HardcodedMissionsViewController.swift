@@ -49,6 +49,16 @@ class HardcodedMissionsViewController: DUXDefaultLayoutViewController {
             
         }
     }
+
+    @objc func doneButton(sender: UIControl) {
+        print("tapped")
+    }
+
+    @IBAction func loadPhotos(_ sender: Any) {
+        let tableViewController = UITableViewController()
+        tableViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButton))
+        self.present(UINavigationController(rootViewController: tableViewController), animated: true)
+    }
     
     @IBAction func loadMission1(_ sender: Any) {
         statusLabel.text = "Loading M1"
@@ -96,16 +106,25 @@ final class HardcodedMissionsManager: NSObject {
     
     private var waypointMission = DJIMutableWaypointMission()
     private var cancellable: AnyCancellable?
+    private var photosDict = [String: [String]]()
+    private let PHOTO_KEY = "com.esri.eric.photos"
+    private var currentMissionName: String!
+    private var currentMissionPhotos = [String]()
     
     private var photoIndex = 0
 
     override init() {
         super.init()
         camera?.delegate = self
+        if let existing = UserDefaults.standard.dictionary(forKey: PHOTO_KEY), let existingPhoto = existing as? [String: [String]] {
+            photosDict = existingPhoto
+        }
     }
 
     func loadMission1() {
         waypointMission.removeAllWaypoints()
+        currentMissionName = "M1"
+        currentMissionPhotos = []
         photoIndex = 0
         loadM1Sample()
         currentStatus.value = "Loaded M1"
@@ -113,6 +132,8 @@ final class HardcodedMissionsManager: NSObject {
 
     func loadMission2() {
         waypointMission.removeAllWaypoints()
+        currentMissionName = "M2"
+        currentMissionPhotos = []
         photoIndex = 0
         loadM2Sample()
         currentStatus.value = "Loaded M2"
@@ -146,12 +167,19 @@ final class HardcodedMissionsManager: NSObject {
     }
 
     func startMission() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        let dateInFormat = dateFormatter.string(from: Date())
+        currentMissionName = "\(currentMissionName)_\(dateInFormat)"
         missionOperator?.startMission { [weak self] error in
+            guard let self else { return }
             guard error == nil else {
-                self?.currentStatus.value = "Start mission failed."
+                self.currentStatus.value = "Start mission failed."
                 return
             }
-            self?.currentStatus.value = "Start mission finished."
+            self.currentStatus.value = "Start mission finished."
+            self.photosDict[self.currentMissionName] = self.currentMissionPhotos
+            UserDefaults.standard.set(self.photosDict, forKey: PHOTO_KEY)
         }
     }
 }

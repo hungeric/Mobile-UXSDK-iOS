@@ -95,7 +95,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="M8V-fF-tLX">
-                                <rect key="frame" x="452" y="95" width="200" height="158.5"/>
+                                <rect key="frame" x="452" y="95" width="200" height="193"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="N/A" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yud-u4-IRN">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="20.5"/>
@@ -133,6 +133,14 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Start"/>
                                         <connections>
                                             <action selector="startMission:" destination="oxe-pl-Lvc" eventType="touchUpInside" id="9OZ-Ve-6xC"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uJv-fC-J4m">
+                                        <rect key="frame" x="0.0" y="158.5" width="200" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Photos"/>
+                                        <connections>
+                                            <action selector="loadPhotos:" destination="oxe-pl-Lvc" eventType="touchUpInside" id="17b-N8-EKM"/>
                                         </connections>
                                     </button>
                                 </subviews>
