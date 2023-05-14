@@ -38,6 +38,10 @@ class HardcodedMissionsViewController: DUXDefaultLayoutViewController {
     @IBOutlet weak var uploadButton: UIButton!
     @IBOutlet weak var startButton: UIButton!
     
+    private lazy var photosNavigationController = {
+        UINavigationController(rootViewController: PhotoListViewController())
+    }()
+    
     private var cancellables = Set<AnyCancellable>()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -50,14 +54,9 @@ class HardcodedMissionsViewController: DUXDefaultLayoutViewController {
         }
     }
 
-    @objc func doneButton(sender: UIControl) {
-        print("tapped")
-    }
 
     @IBAction func loadPhotos(_ sender: Any) {
-        let tableViewController = UITableViewController()
-        tableViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButton))
-        self.present(UINavigationController(rootViewController: tableViewController), animated: true)
+        self.present(photosNavigationController, animated: true)
     }
     
     @IBAction func loadMission1(_ sender: Any) {
@@ -99,6 +98,41 @@ class HardcodedMissionsViewController: DUXDefaultLayoutViewController {
     }
 }
 
+struct MissionPhotos {
+    var name: String
+    var photos: [String] = []
+}
+
+final class PhotoListViewController: UITableViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButton))
+        view.backgroundColor = .black
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
+    }
+    
+    @objc func doneButton(sender: UIControl) {
+        self.dismiss(animated: true)
+    }
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        HardcodedMissionsManager.shared.photos.count
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        HardcodedMissionsManager.shared.photos[section].photos.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell") ?? UITableViewCell()
+        let name = HardcodedMissionsManager.shared.photos[indexPath.section].photos[indexPath.row]
+        cell.textLabel?.text = name
+
+        return cell
+    }
+}
+
 final class HardcodedMissionsManager: NSObject {
     static let shared = HardcodedMissionsManager()
     
@@ -106,7 +140,7 @@ final class HardcodedMissionsManager: NSObject {
     
     private var waypointMission = DJIMutableWaypointMission()
     private var cancellable: AnyCancellable?
-    private var photosDict = [String: [String]]()
+    private(set) var photos = [MissionPhotos]()
     private let PHOTO_KEY = "com.esri.eric.photos"
     private var currentMissionName: String!
     private var currentMissionPhotos = [String]()
@@ -116,8 +150,8 @@ final class HardcodedMissionsManager: NSObject {
     override init() {
         super.init()
         camera?.delegate = self
-        if let existing = UserDefaults.standard.dictionary(forKey: PHOTO_KEY), let existingPhoto = existing as? [String: [String]] {
-            photosDict = existingPhoto
+        if let existing = UserDefaults.standard.array(forKey: PHOTO_KEY), let existingPhotos = existing as? [MissionPhotos] {
+            photos = existingPhotos
         }
     }
 
@@ -178,8 +212,9 @@ final class HardcodedMissionsManager: NSObject {
                 return
             }
             self.currentStatus.value = "Start mission finished."
-            self.photosDict[self.currentMissionName] = self.currentMissionPhotos
-            UserDefaults.standard.set(self.photosDict, forKey: PHOTO_KEY)
+            let missionPhotos = MissionPhotos(name: currentMissionName, photos: currentMissionPhotos)
+            self.photos.append(missionPhotos)
+            UserDefaults.standard.set(self.photos, forKey: PHOTO_KEY)
         }
     }
 }
