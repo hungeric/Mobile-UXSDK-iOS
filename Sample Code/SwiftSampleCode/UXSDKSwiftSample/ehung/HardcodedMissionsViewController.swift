@@ -98,7 +98,7 @@ class HardcodedMissionsViewController: DUXDefaultLayoutViewController {
     }
 }
 
-struct MissionPhotos {
+struct MissionPhotos: Codable {
     var name: String
     var photos: [String] = []
 }
@@ -108,12 +108,21 @@ final class PhotoListViewController: UITableViewController {
         super.viewDidLoad()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButton))
-        view.backgroundColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Refresh", style: .plain, target: self, action: #selector(refreshButton))
+        view.backgroundColor = .lightGray
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
     }
     
     @objc func doneButton(sender: UIControl) {
         self.dismiss(animated: true)
+    }
+
+    @objc func refreshButton(sender: UIControl) {
+        tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        HardcodedMissionsManager.shared.photos[section].name
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -142,7 +151,7 @@ final class HardcodedMissionsManager: NSObject {
     private var cancellable: AnyCancellable?
     private(set) var photos = [MissionPhotos]()
     private let PHOTO_KEY = "com.esri.eric.photos"
-    private var currentMissionName: String!
+    private var currentMissionName = ""
     private var currentMissionPhotos = [String]()
     
     private var photoIndex = 0
@@ -150,9 +159,11 @@ final class HardcodedMissionsManager: NSObject {
     override init() {
         super.init()
         camera?.delegate = self
-        if let existing = UserDefaults.standard.array(forKey: PHOTO_KEY), let existingPhotos = existing as? [MissionPhotos] {
-            photos = existingPhotos
-        }
+        self.photos = (try? UserDefaults.standard.getObject(forKey: PHOTO_KEY, castTo: [MissionPhotos].self)) ?? []
+        print(self.photos)
+//        let missionPhotos = MissionPhotos(name: "test", photos: ["xyz.jpg"])
+//        self.photos.append(missionPhotos)
+//        try? UserDefaults.standard.setObject(self.photos, forKey: PHOTO_KEY)
     }
 
     func loadMission1() {
@@ -184,12 +195,17 @@ final class HardcodedMissionsManager: NSObject {
         waypointMission.flightPathMode = .curved
 
         missionOperator?.load(waypointMission)
-        missionOperator?.addListener(toFinished: self, with: .main) { [weak self] error in
+        missionOperator?.removeListener(self)
+        missionOperator?.addListener(toFinished: self, with: .main) { [weak self] error in // ehung this can get called multiple time
+            guard let self else { return }
             guard error == nil else {
-                self?.currentStatus.value = "Mission execution failed."
+                self.currentStatus.value = "Mission execution failed."
                 return
             }
-            self?.currentStatus.value = "Mission execution finished."
+            self.currentStatus.value = "Mission execution finished."
+            let missionPhotos = MissionPhotos(name: self.currentMissionName, photos: self.currentMissionPhotos)
+            self.photos.append(missionPhotos)
+            try? UserDefaults.standard.setObject(self.photos, forKey: PHOTO_KEY)
         }
         missionOperator?.uploadMission { [weak self] error in
             guard error == nil else {
@@ -212,9 +228,6 @@ final class HardcodedMissionsManager: NSObject {
                 return
             }
             self.currentStatus.value = "Start mission finished."
-            let missionPhotos = MissionPhotos(name: currentMissionName, photos: currentMissionPhotos)
-            self.photos.append(missionPhotos)
-            UserDefaults.standard.set(self.photos, forKey: PHOTO_KEY)
         }
     }
 }
@@ -314,10 +327,9 @@ private extension HardcodedMissionsManager {
 
 extension HardcodedMissionsManager: DJICameraDelegate {
     func camera(_ camera: DJICamera, didGenerateNewMediaFile newMedia: DJIMediaFile) {
+        currentMissionPhotos.append("\(newMedia.fileName)-\(newMedia.index)-\(newMedia.timeCreated)")
         photoIndex += 1
         currentStatus.value = "photo taken index: \(photoIndex)"
-        print("ehung")
-        print(newMedia.description)
     }
 }
 
@@ -400,5 +412,32 @@ final class CodableDJIWaypoint: Codable {
         waypoint.gimbalPitch = gimbalPitch
         waypoint.shootPhotoDistanceInterval = shootPhotoDistanceInterval
         waypoint.actionTimeoutInSeconds = Int32(actionTimeoutInSeconds)
+    }
+}
+
+
+extension UserDefaults {
+    enum MapPhotosError: Error {
+        case defaultsError
+    }
+    func setObject<Object>(_ object: Object, forKey: String) throws where Object: Encodable {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(object)
+            set(data, forKey: forKey)
+        } catch(let error) {
+            throw error
+        }
+    }
+    
+    func getObject<Object>(forKey: String, castTo type: Object.Type) throws -> Object where Object: Decodable {
+        guard let data = data(forKey: forKey) else { throw MapPhotosError.defaultsError }
+        let decoder = JSONDecoder()
+        do {
+            let object = try decoder.decode(type, from: data)
+            return object
+        } catch(let error) {
+            throw error
+        }
     }
 }
